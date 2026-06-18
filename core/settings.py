@@ -123,3 +123,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+sentry_dsn = os.environ.get("SENTRY_DSN", "votre-dsn")
+if sentry_dsn and sentry_dsn.startswith(("http://", "https://")):
+    sentry_sdk.init(
+        dsn=sentry_dsn,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0, # Ajustez le taux de collecte des traces
+        send_default_pii=True
+    )
